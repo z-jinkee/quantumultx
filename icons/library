@@ -1,0 +1,85 @@
+{
+    "name": "策略图标",
+    "icons": [
+        {
+            "name": "hk",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/hk.png"
+        },
+        {
+            "name": "jp",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/jp.png"
+        },
+        {
+            "name": "sg",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/sg.png"
+        },
+        {
+            "name": "tw",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/tw.png"
+        },
+        {
+            "name": "us",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/us.png"
+        },
+        {
+            "name": "block",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/block.png"
+        },
+        {
+            "name": "bypass",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/bypass.png"
+        },
+        {
+            "name": "direct",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/direct.png"
+        },
+        {
+            "name": "disney",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/disney.png"
+        },
+        {
+            "name": "dow",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/dow.png"
+        },
+        {
+            "name": "emby",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/emby.png"
+        },
+        {
+            "name": "google",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/google.png"
+        },
+        {
+            "name": "icloud",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/icloud.png"
+        },
+        {
+            "name": "openai",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/openai.png"
+        },
+        {
+            "name": "proxy",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/proxy.png"
+        },
+        {
+            "name": "random",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/random.png"
+        },
+        {
+            "name": "reject",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/reject.png"
+        },
+        {
+            "name": "speed",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/speed.png"
+        },
+        {
+            "name": "spotify",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/spotify.png"
+        },
+        {
+            "name": "telegram",
+            "url": "https://raw.githubusercontent.com/z-jinkee/quantumultx/refs/heads/main/icons/telegram.png"
+        }
+    ]
+}
