@@ -6080,7 +6080,7 @@
 			captionLang: "off",
 			blockUpload: !0,
 			blockImmersive: !0,
-			blockShorts: !0
+			blockShorts: !1
 		})
 	}
 	var gc = g(h(), 1);
