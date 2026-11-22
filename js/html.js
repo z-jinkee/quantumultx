@@ -3,7 +3,7 @@
 
   function decodeBase64Utf8(str) {
     var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    var clean = String(str || "").replace(/[^A-Za-z0123456789+/=]/g, "");
+    var clean = String(str || "").replace(/[^A-Za-z0-9+/=]/g, "");
     var bytes = [];
     for (var i = 0; i < clean.length; i += 4) {
       var c1 = chars.indexOf(clean.charAt(i));
@@ -63,24 +63,25 @@
     + LT + "span id=\"st\"" + GT + "粘贴JSON后自动格式化" + LT + "/span" + GT
     + LT + "span id=\"lc\" class=\"bottom-lc\"" + GT + "行数0" + LT + "/span" + GT
     + LT + "/div" + GT
-    + LT + "div class=\"box\"" + GT
+    + LT + "div id=\"inpBox\" class=\"box\"" + GT
     + LT + "textarea id=\"inp\" placeholder=\"在此粘贴或输入 JSON...\"" + GT + LT + "/textarea" + GT
-    + LT + "div class=\"inp-bottom\"" + GT
+    + LT + "/div" + GT
+    + LT + "div class=\"btn-bar\"" + GT
     + LT + "div class=\"inp-btns\"" + GT
-    + LT + "button id=\"btnColorLine\" class=\"act-btn fixed-btn\" type=\"button\"" + GT + "彩线：关" + LT + "/button" + GT
+    + LT + "button id=\"btnColorLine\" class=\"act-btn fixed-btn btn-line\" type=\"button\"" + GT + "彩线：关" + LT + "/button" + GT
     + LT + "div class=\"pop-anchor\"" + GT
     + LT + "div id=\"indentPop\" class=\"pop-panel\"" + GT
     + LT + "div class=\"pop-title\"" + GT + "输出框缩进格数" + LT + "/div" + GT
     + LT + "div id=\"indentList\" class=\"theme-list\"" + GT + LT + "/div" + GT
     + LT + "/div" + GT
-    + LT + "button id=\"btnIndent\" class=\"act-btn fixed-btn\" type=\"button\"" + GT + "缩进4格" + LT + "/button" + GT
+    + LT + "button id=\"btnIndent\" class=\"act-btn fixed-btn btn-indent\" type=\"button\"" + GT + "缩进4格" + LT + "/button" + GT
     + LT + "/div" + GT
     + LT + "div class=\"pop-anchor\"" + GT
     + LT + "div id=\"themePop\" class=\"pop-panel\"" + GT
     + LT + "div class=\"pop-title\"" + GT + "输出窗口字体配色" + LT + "/div" + GT
     + LT + "div id=\"themeList\" class=\"theme-list\"" + GT + LT + "/div" + GT
     + LT + "/div" + GT
-    + LT + "button id=\"btnTheme\" class=\"act-btn fixed-btn\" type=\"button\"" + GT + "配色蓝绿" + LT + "/button" + GT
+    + LT + "button id=\"btnTheme\" class=\"act-btn fixed-btn btn-theme\" type=\"button\"" + GT + "配色蓝绿" + LT + "/button" + GT
     + LT + "/div" + GT
     + LT + "div class=\"pop-anchor\"" + GT
     + LT + "div id=\"fontPop\" class=\"pop-panel\"" + GT
@@ -93,11 +94,10 @@
     + LT + "span onclick=\"pickFont(18)\"" + GT + "18" + LT + "/span" + GT
     + LT + "/div" + GT
     + LT + "/div" + GT
-    + LT + "button id=\"btnFont\" class=\"act-btn fixed-btn\" type=\"button\"" + GT + "字体13px" + LT + "/button" + GT
+    + LT + "button id=\"btnFont\" class=\"act-btn fixed-btn btn-font\" type=\"button\"" + GT + "字体13px" + LT + "/button" + GT
     + LT + "/div" + GT
-    + LT + "button id=\"btnClear\" class=\"act-btn fixed-btn\" type=\"button\"" + GT + "清空内容" + LT + "/button" + GT
-    + LT + "button id=\"btnCopy\" class=\"act-btn fixed-btn\" type=\"button\"" + GT + "拷贝内容" + LT + "/button" + GT
-    + LT + "/div" + GT
+    + LT + "button id=\"btnClear\" class=\"act-btn fixed-btn btn-clear\" type=\"button\"" + GT + "清空内容" + LT + "/button" + GT
+    + LT + "button id=\"btnCopy\" class=\"act-btn fixed-btn btn-copy\" type=\"button\"" + GT + "拷贝内容" + LT + "/button" + GT
     + LT + "/div" + GT
     + LT + "/div" + GT
     + LT + "div id=\"viewBox\" class=\"box view-compact\"" + GT
@@ -135,8 +135,10 @@
     + "var indentOptions=[2,4,6,8],curIndent=4;"
     
     + "var themes=["
-    + "{id:\"nord\",shortName:\"ND\",label:\"极地微光\",k:\"#2868c4\",s:\"#d83b52\",n:\"#4fa85b\",b:\"#a45bd6\",nl:\"#657997\",dk:\"#68a5f5\",ds:\"#ed8965\",dn:\"#8bd66b\",db:\"#c18aeb\",dnl:\"#7487a5\"},"
-    + "{id:\"github\",shortName:\"GH\",label:\"经典简约\",k:\"#0550ae\",s:\"#cf222e\",n:\"#116329\",b:\"#8250df\",nl:\"#6e7781\",dk:\"#79c0ff\",ds:\"#ffa198\",dn:\"#7ee787\",db:\"#d2a8ff\",dnl:\"#8b949e\"}"
+    + "{id:\"nord\",shortName:\"默认\",label:\"默认\",k:\"#2868c4\",s:\"#d83b52\",n:\"#4fa85b\",b:\"#a45bd6\",nl:\"#657997\",dk:\"#68a5f5\",ds:\"#ed8965\",dn:\"#8bd66b\",db:\"#c18aeb\",dnl:\"#7487a5\"},"
+    + "{id:\"monokai\",shortName:\"深邃\",label:\"深邃\",k:\"#c75b7a\",s:\"#2aa198\",n:\"#d49b35\",b:\"#5b7ce6\",nl:\"#7d8590\",dk:\"#f07198\",ds:\"#38c7bd\",dn:\"#ebb64b\",db:\"#7b9cff\",dnl:\"#9aa2ad\"},"
+    + "{id:\"dracula\",shortName:\"暗夜\",label:\"暗夜\",k:\"#2b9eb3\",s:\"#d95f43\",n:\"#9b5de5\",b:\"#3ca35a\",nl:\"#7c8291\",dk:\"#4cc9f0\",ds:\"#f47c5e\",dn:\"#b57edc\",db:\"#52c472\",dnl:\"#989ea8\"},"
+    + "{id:\"tokyo\",shortName:\"樱墨\",label:\"樱墨\",k:\"#d97724\",s:\"#6c5ce7\",n:\"#16a085\",b:\"#d63384\",nl:\"#7a828e\",dk:\"#f39c42\",ds:\"#8e7dff\",dn:\"#2ec4a6\",db:\"#f25ca2\",dnl:\"#9aa2ae\"}"
     + "];"
 
     + "var curThemeIdx=0,isDarkMode=window.matchMedia&&window.matchMedia(\"(prefers-color-scheme:dark)\").matches;"
@@ -149,7 +151,7 @@
     + "if(window.matchMedia){var mq=window.matchMedia(\"(prefers-color-scheme:dark)\");var onMq=function(){isDarkMode=mq.matches;applyTheme(curThemeIdx)};if(mq.addEventListener)mq.addEventListener(\"change\",onMq);else if(mq.addListener)mq.addListener(onMq)}"
     + "function makeDepthPalette(){var hues=[205,145,35,275,345,175,55,235];var arr=[];for(var i=0;i<hues.length;i++){var h=(hues[i]+Math.floor(Math.random()*24)-12+360)%360;var l=isDarkMode?64:58;arr.push(\"hsla(\"+h+\",42%,\"+l+\"%,0.65)\")}return arr}"
     + "depthPalette=makeDepthPalette();"
-    + "function applyColorLineState(){btnColorLine.textContent=colorLineEnabled?\"彩线：开\":\"彩线：关\";if(colorLineEnabled){btnColorLine.className=\"act-btn fixed-btn active-toggle\"}else{btnColorLine.className=\"act-btn fixed-btn\"}if(inp.value.trim()){run(false)}}"
+    + "function applyColorLineState(){btnColorLine.textContent=colorLineEnabled?\"彩线：开\":\"彩线：关\";if(colorLineEnabled){btnColorLine.className=\"act-btn fixed-btn btn-line active-toggle\"}else{btnColorLine.className=\"act-btn fixed-btn btn-line\"}if(inp.value.trim()){run(false)}}"
     + "btnColorLine.onclick=function(){colorLineEnabled=!colorLineEnabled;if(colorLineEnabled)depthPalette=makeDepthPalette();applyColorLineState()};"
     + "function getLineStyleAttr(depthIdx){if(!colorLineEnabled)return \"\";var col=depthPalette[depthIdx%depthPalette.length];return \" style='border-left-color:\"+col+\"'\"}"
     + "function applyFontSize(px){var n=Number(px)||13;if(n<11)n=11;if(n>18)n=18;curFontSize=n;fontSlider.value=n;fontValTxt.textContent=n+\"px\";tree.style.fontSize=n+\"px\";btnFont.textContent=\"字体\"+n+\"px\"}"
@@ -177,7 +179,7 @@
     + "window.onRowKeep=function(idx,cb){draftRows[idx].keep=cb.checked;if(cb.checked)draftRows[idx].del=false;renderBatchRows();recomputeJq()};"
     + "window.onRowCheck=function(idx,cb){draftRows[idx].del=cb.checked;if(cb.checked)draftRows[idx].keep=false;renderBatchRows();recomputeJq()};"
     + "window.onRowVal=function(idx,el){draftRows[idx].rawVal=el.value;draftRows[idx].changed=true;recomputeJq()};"
-    + "function renderBatchRows(){var h=\"\";if(curInfo.isBranch){h+=\"<div class='self-box'><label class='self-chk'><input type='checkbox' \"+(delSelf?\"checked\":\"\")+\" onchange='onToggleSelf(this)'><span>屏蔽当前层级本身（\"+esc(curInfo.jq)+\"）</span></label></div>\";h+=\"<div class='field-lbl'>子项批量：勾选“保留”则排除未勾选项；也可填新值或勾选“屏蔽”</div><div class='batch-list'>\";for(var i=0;i<draftRows.length;i++){var r=draftRows[i];h+=\"<div class='batch-row'><span class='b-key' title='\"+esc(r.label)+\"'>\"+esc(r.label)+\"</span><input class='b-val' type='text' value='\"+esc(r.rawVal)+\"' oninput='onRowVal(\"+i+\",this)' placeholder='新值'><label class='b-chk keep-chk'><input type='checkbox' \"+(r.keep?\"checked\":\"\")+\" onchange='onRowKeep(\"+i+\",this)'>保留</label><label class='b-chk'><input type='checkbox' \"+(r.del?\"checked\":\"\")+\" onchange='onRowCheck(\"+i+\",this)'>屏蔽</label></div>\"}h+=\"</div>\"}else{var r0=draftRows[0];h+=\"<div class='field-lbl'>当前值（修改或勾选屏蔽）</div><div class='batch-row'><span class='b-key'>当前项</span><input class='b-val' type='text' value='\"+esc(r0.rawVal)+\"' oninput='onRowVal(0,this)' placeholder='新值'><label class='b-chk'><input type='checkbox' \"+(r0.del?\"checked\":\"\")+\" onchange='onRowCheck(0,this)'>屏蔽</label></div>\"}batchArea.innerHTML=h}"
+    + "function renderBatchRows(){var h=\"\";if(curInfo.isBranch){h+=\"<div class='self-box'><label class='self-chk'><input type='checkbox' \"+(delSelf?\"checked\":\"\")+\" onchange='onToggleSelf(this)'><span>屏蔽当前层级（\"+esc(curInfo.jq)+\"）</span></label></div>\";h+=\"<div class='field-lbl'>子项批量：勾选“保留”或者”屏蔽” 也可填新值</div><div class='batch-list'>\";for(var i=0;i<draftRows.length;i++){var r=draftRows[i];h+=\"<div class='batch-row'><span class='b-key' title='\"+esc(r.label)+\"'>\"+esc(r.label)+\"</span><input class='b-val' type='text' value='\"+esc(r.rawVal)+\"' oninput='onRowVal(\"+i+\",this)' placeholder='新值'><label class='b-chk keep-chk'><input type='checkbox' \"+(r.keep?\"checked\":\"\")+\" onchange='onRowKeep(\"+i+\",this)'>保留</label><label class='b-chk'><input type='checkbox' \"+(r.del?\"checked\":\"\")+\" onchange='onRowCheck(\"+i+\",this)'>屏蔽</label></div>\"}h+=\"</div>\"}else{var r0=draftRows[0];h+=\"<div class='field-lbl'>当前值（修改或勾选屏蔽）</div><div class='batch-row'><span class='b-key'>当前项</span><input class='b-val' type='text' value='\"+esc(r0.rawVal)+\"' oninput='onRowVal(0,this)' placeholder='新值'><label class='b-chk'><input type='checkbox' \"+(r0.del?\"checked\":\"\")+\" onchange='onRowCheck(0,this)'>屏蔽</label></div>\"}batchArea.innerHTML=h}"
     + "window.openBatchModal=function(el){var pid=el.getAttribute(\"data-pid\");var info=nodeMap[pid];if(!info)return;curInfo=info;delSelf=false;var v=info.val;var isA=Array.isArray(v),isO=!isA&&v!==null&&typeof v===\"object\";info.isBranch=isA||isO;modalTitle.textContent=info.isBranch?\"当前层级与子项批量 jq 生成\":\"单节点修改 / 屏蔽\";modalPath.textContent=info.jq;draftRows=[];if(info.isBranch){if(isA){for(var i=0;i<v.length;i++){var iv=v[i];draftRows.push({key:i,label:\"[\"+i+\"]\",rel:relJqSeg(i),rawVal:(iv!==null&&typeof iv===\"object\")?JSON.stringify(iv):String(iv),changed:false,keep:false,del:false})}}else{var ks=Object.keys(v);for(var j=0;j<ks.length;j++){var k=ks[j];var kv=v[k];draftRows.push({key:k,label:k,rel:relJqSeg(k),rawVal:(kv!==null&&typeof kv===\"object\")?JSON.stringify(kv):String(kv),changed:false,keep:false,del:false})}}}else{draftRows.push({key:null,label:\"value\",rel:\"\",rawVal:(v!==null&&typeof v===\"object\")?JSON.stringify(v):String(v),changed:false,keep:false,del:false})}renderBatchRows();recomputeJq();modalMask.style.display=\"flex\"};"
     + "btnCopyJq.onclick=function(){if(!jqOut.value)return;copyText(jqOut.value,\"\");flashBtn(btnCopyJq,\"已复制\",\"复制 jq\",1000,\"jq\")};"
     + "btnCloseModal.onclick=function(){modalMask.style.display=\"none\"};"
@@ -197,17 +199,15 @@
 
   var styleHtml = ""
     + LT + "style" + GT
-    + ":root{--bg:#eef3f9;--card:#ffffff;--sub:#f6f9fc;--hover:#e6f0fa;--fg:#0f172a;--mut:#5b6b82;--bd:#d8e2ef;--line:#8fa3bd;--punc:#8fa3bd;--k:#0284c7;--s:#15803d;--n:#b45309;--b:#6d28d9;--nl:#0369a1;--acc:#2563eb;--row-h:30px;--box-shadow:0 4px 16px rgba(15,23,42,0.05);--btn-shadow:0 1px 2px rgba(15,23,42,0.04)}"
+    + ":root{--bg:#ffffff;--card:#EBEFF5;--sub:#e8eef6;--hover:#dce5f2;--fg:#0f172a;--mut:#5b6b82;--bd:#d4dfed;--line:#8fa3bd;--punc:#8fa3bd;--k:#0284c7;--s:#15803d;--n:#b45309;--b:#6d28d9;--nl:#0369a1;--acc:#2563eb;--row-h:30px;--box-shadow:0 4px 16px rgba(15,23,42,0.05);--btn-shadow:0 1px 2px rgba(15,23,42,0.04)}"
     + "@media(prefers-color-scheme:dark){:root{--bg:#090d16;--card:#111827;--sub:#0d1322;--hover:#1a253b;--fg:#f1f5f9;--mut:#8b9bb4;--bd:#1e293b;--line:#475569;--punc:#64748b;--k:#38bdf8;--s:#4ade80;--n:#facc15;--b:#c084fc;--nl:#38bdf8;--acc:#3b82f6;--row-h:30px;--box-shadow:none;--btn-shadow:none}}"
-    + "*{box-sizing:border-box;touch-action:manipulation}"
-    + "body{margin:0;padding:24px 12px 12px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang SC','Microsoft YaHei',sans-serif;background:linear-gradient(180deg,var(--bg) 0%,#e5ecf5 100%);min-height:100vh;color:var(--fg);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}"
-    + "@media(prefers-color-scheme:dark){body{background:var(--bg)}}"
+    + "*{box-sizing:border-box;touch-action:manipulation;-webkit-tap-highlight-color:transparent}"
+    + "body{margin:0;padding:24px 12px 12px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);min-height:100vh;color:var(--fg);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}"
     + ".meta-bar{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mut);margin-bottom:8px;padding:0 2px}"
     + ".box{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:10px;box-shadow:var(--box-shadow)}"
-    + "textarea{width:100%;height:120px;border:1px solid var(--bd);border-radius:8px;padding:9px 11px;background:var(--sub);color:var(--fg);font-family:ui-monospace,'SFMono-Regular',Menlo,Monaco,'Cascadia Code',Consolas,'PingFang SC',monospace;font-size:16px;line-height:1.55;resize:vertical;outline:none;transition:border-color 0.15s,background 0.15s}"
-    + "textarea:focus{border-color:var(--acc);background:var(--card)}"
-    + ".inp-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}"
-    + ".bottom-lc{font-size:12px;color:var(--mut);padding-left:2px;white-space:nowrap}"
+    + ".box-title{font-size:12px;font-weight:600;color:var(--mut);margin-bottom:6px;padding-left:2px}"
+    + "textarea{width:100%;height:120px;border:0;padding:2px 2px 0;background:transparent;color:var(--fg);font-family:ui-monospace,'SFMono-Regular',Menlo,Monaco,'Cascadia Code',Consolas,'PingFang SC',monospace;font-size:16px;line-height:1.55;resize:vertical;outline:none}"
+    + ".btn-bar{display:flex;justify-content:flex-end;align-items:center;margin-bottom:10px}"
     + ".inp-btns{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}"
     + ".pop-anchor{position:relative;display:inline-flex}"
     + ".pop-panel{display:none;position:absolute;bottom:calc(100% + 6px);right:0;width:190px;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--card);box-shadow:0 12px 28px rgba(15,23,42,0.16);z-index:50}"
@@ -223,13 +223,32 @@
     + ".font-ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}"
     + ".font-ticks span{cursor:pointer;padding:1px 4px;border-radius:4px}"
     + ".font-ticks span:hover{background:var(--hover);color:var(--fg)}"
-    + ".act-btn{padding:6px 12px;font-size:12px;font-weight:500;border-radius:7px;border:1px solid var(--bd);background:var(--sub);color:var(--fg);cursor:pointer;white-space:nowrap;box-shadow:var(--btn-shadow);transition:background 0.15s,border-color 0.15s}"
+    + ".act-btn{padding:6px 12px;font-size:12px;font-weight:500;border-radius:7px;border:1px solid var(--bd);background:var(--sub);color:var(--fg);cursor:pointer;white-space:nowrap;box-shadow:var(--btn-shadow);transition:background 0.15s,border-color 0.15s,color 0.15s}"
     + ".fixed-btn{width:84px;text-align:center;padding-left:0;padding-right:0}"
-    + ".active-toggle{border-color:var(--acc);color:var(--acc);background:var(--hover)}"
-    + ".act-btn:hover{background:var(--hover);border-color:#c2d1e5}"
-    + "@media(prefers-color-scheme:dark){.act-btn:hover{border-color:var(--bd)}}"
+    + ".btn-line{background:#eef4ff;border-color:#bfd4f7;color:#1d4ed8}"
+    + ".btn-line:hover{background:#dfecff;border-color:#9fc0f5}"
+    + ".btn-indent{background:#ecfdf5;border-color:#b7ebd4;color:#047857}"
+    + ".btn-indent:hover{background:#d7f9ea;border-color:#90dec0}"
+    + ".btn-theme{background:#f5f3ff;border-color:#d8cdfc;color:#6d28d9}"
+    + ".btn-theme:hover{background:#eae5ff;border-color:#beabf9}"
+    + ".btn-font{background:#fffbeb;border-color:#f7dfa1;color:#b45309}"
+    + ".btn-font:hover{background:#fef3c7;border-color:#f0ce78}"
+    + ".btn-clear{background:#fef2f2;border-color:#fad0d0;color:#b91c1c}"
+    + ".btn-clear:hover{background:#fee2e2;border-color:#f5b0b0}"
+    + ".btn-copy{background:#eff6ff;border-color:#b9d7fc;color:#0369a1}"
+    + ".btn-copy:hover{background:#dbeafe;border-color:#93c3fa}"
+    + ".active-toggle{border-color:#2563eb;color:#1e40af;background:#dbeafe;font-weight:600}"
+    + "@media(prefers-color-scheme:dark){"
+    + ".btn-line{background:#13233f;border-color:#26457a;color:#93c5fd}.btn-line:hover{background:#182d52}"
+    + ".btn-indent{background:#0f2b24;border-color:#1e5446;color:#6ee7b7}.btn-indent:hover{background:#14382f}"
+    + ".btn-theme{background:#23183d;border-color:#442f78;color:#d8b4fe}.btn-theme:hover{background:#2d1f4f}"
+    + ".btn-font{background:#2e210d;border-color:#5c4218;color:#fcd34d}.btn-font:hover{background:#3b2a11}"
+    + ".btn-clear{background:#331418;border-color:#69262f;color:#fca5a5}.btn-clear:hover{background:#42191e}"
+    + ".btn-copy{background:#10293d;border-color:#1f4f75;color:#7dd3fc}.btn-copy:hover{background:#15354f}"
+    + ".active-toggle{border-color:#60a5fa;color:#bfdbfe;background:#1e3a8a;font-weight:600}"
+    + "}"
     + ".act-btn.primary{background:linear-gradient(180deg,#3b82f6 0%,#2563eb 100%);color:#ffffff;border-color:#1d4ed8;box-shadow:0 2px 6px rgba(37,99,235,0.25)}"
-    + ".view-compact{height:142px;overflow:hidden}"
+    + ".view-compact{height:1000px;overflow:hidden}"
     + ".view-expanded{height:auto;overflow:visible}"
     + ".outer-wrap{display:flex;align-items:flex-start;overflow:auto;font-family:ui-monospace,'SFMono-Regular',Menlo,Monaco,'Cascadia Code',Consolas,'PingFang SC',monospace}"
     + ".outer-nums{flex-shrink:0;padding-right:10px;margin-right:10px;border-right:1px solid var(--bd);text-align:right;color:var(--mut);font-size:12px;user-select:none;background:linear-gradient(90deg,transparent 0%,rgba(238,243,249,0.45) 100%)}"
