@@ -3,7 +3,7 @@
 
   function decodeBase64Utf8(str) {
     var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    var clean = String(str || "").replace(/[^A-Za-z0-9+/=]/g, "");
+    var clean = String(str || "").replace(/[^A-Za-z0123456789+/=]/g, "");
     var bytes = [];
     for (var i = 0; i < clean.length; i += 4) {
       var c1 = chars.indexOf(clean.charAt(i));
@@ -32,8 +32,8 @@
         var u2 = bytes[j++];
         out += String.fromCharCode(((u1 & 31) << 6) | (u2 & 63));
       } else if (u1 >= 224 && j + 1 < bytes.length) {
+        var u2 = bytes[j++];
         var u3 = bytes[j++];
-        var u4 = bytes[j++];
         out += String.fromCharCode(((u1 & 15) << 12) | ((u2 & 63) << 6) | (u3 & 63));
       }
     }
@@ -133,7 +133,7 @@
     + "var curFontSize=13,clearTimer=null,copyTimer=null,jqCopyTimer=null;"
     + "var colorLineEnabled=false,depthPalette=[];"
     + "var indentOptions=[2,4,6,8],curIndent=4;"
-    
+
     + "var themes=["
     + "{id:\"nord\",shortName:\"默认\",label:\"默认\",k:\"#2868c4\",s:\"#d83b52\",n:\"#4fa85b\",b:\"#a45bd6\",nl:\"#657997\",dk:\"#68a5f5\",ds:\"#ed8965\",dn:\"#8bd66b\",db:\"#c18aeb\",dnl:\"#7487a5\"},"
     + "{id:\"monokai\",shortName:\"深邃\",label:\"深邃\",k:\"#c75b7a\",s:\"#2aa198\",n:\"#d49b35\",b:\"#5b7ce6\",nl:\"#7d8590\",dk:\"#f07198\",ds:\"#38c7bd\",dn:\"#ebb64b\",db:\"#7b9cff\",dnl:\"#9aa2ad\"},"
@@ -173,8 +173,10 @@
     + "function keepKeyExpr(k){var ks=String(k);if(/^[A-Za-z_][A-Za-z0-9_]*$/.test(ks))return ks;return JSON.stringify(ks)}"
     + "function parseInputVal(raw){var s=String(raw);if(!s.length)return \"\";try{return JSON.parse(s)}catch(e){return s}}"
     + "function build(k,v,parentJq,depth,root){var curJq=root?\".\":joinJqPath(parentJq,k);var pid=\"n\"+(++nodeSeq);nodeMap[pid]={jq:curJq,val:v};var isA=Array.isArray(v),isO=!isA&&v!==null&&typeof v===\"object\",br=isA||isO;var indentHtml=\"\";for(var d=0;d<depth;d++){indentHtml+=\"<span class='line-col'\"+getLineStyleAttr(d)+\"></span>\"}var swHtml=br?(\"<span class='sw' onclick='tog(this)'>−</span>\"):(\"<span class='leaf-sp'>·</span>\");var txtHtml=\"\";if(k!==null){txtHtml+=\"<span class='k'>\"+(typeof k===\"number\"?\"[\"+k+\"]\":esc(JSON.stringify(String(k))))+\"</span><span class='punc'>: </span>\"}if(br){var c=isA?v.length:Object.keys(v).length;txtHtml+=\"<span class='m'>{\" + c + \"}</span><span class='fold-tag' style='display:none'>已折叠</span>\";var rowHtml=\"<div class='row-line'>\"+indentHtml+swHtml+\"<span class='node-txt' data-pid='\"+pid+\"' onclick='openBatchModal(this)'>\"+txtHtml+\"</span></div>\";var childHtml=\"<div class='ch-wrap'>\";if(isA){for(var i=0;i<v.length;i++){childHtml+=build(i,v[i],curJq,depth+1,false)}}else{var ks=Object.keys(v);for(var j=0;j<ks.length;j++){childHtml+=build(ks[j],v[ks[j]],curJq,depth+1,false)}}childHtml+=\"</div>\";return \"<div class='node-block'>\"+rowHtml+childHtml+\"</div>\"}else{txtHtml+=renderVal(v);return \"<div class='node-block'><div class='row-line'>\"+indentHtml+swHtml+\"<span class='node-txt' data-pid='\"+pid+\"' onclick='openBatchModal(this)'>\"+txtHtml+\"</span></div></div>\"}}"
-    + "function buildSingleExpr(targetExpr,r){if(r.del)return \"del(\" + targetExpr + \")\";if(!r.changed)return \"\";return targetExpr + \" = \" + JSON.stringify(parseInputVal(r.rawVal))}"
-    + "function recomputeJq(){if(!curInfo)return;if(delSelf){jqOut.value=\"del(\" + curInfo.jq + \")\";return}if(curInfo.isBranch){var keptRows=[];for(var kIdx=0;kIdx<draftRows.length;kIdx++){if(draftRows[kIdx].keep)keptRows.push(draftRows[kIdx])}var hasKeep=keptRows.length>0;var keepExpr=\"\";if(hasKeep){if(Array.isArray(curInfo.val)){var arrItems=[];for(var a=0;a<keptRows.length;a++){var ar=keptRows[a];if(ar.changed){arrItems.push(JSON.stringify(parseInputVal(ar.rawVal)))}else{arrItems.push(\".[\"+ar.key+\"]\")}}keepExpr=\"[\" + arrItems.join(\", \") + \"]\"}else{var objItems=[];for(var o=0;o<keptRows.length;o++){var orow=keptRows[o];if(orow.changed){objItems.push(keepKeyExpr(orow.key)+\": \"+JSON.stringify(parseInputVal(orow.rawVal)))}else{objItems.push(keepKeyExpr(orow.key))}}keepExpr=\"{ \" + objItems.join(\", \") + \" }\"}}var mutParts=[];for(var i=0;i<draftRows.length;i++){var r=draftRows[i];if(hasKeep&&!r.keep)continue;if(r.keep)continue;var subExpr=buildSingleExpr(r.rel,r);if(subExpr)mutParts.push(subExpr)}var steps=[];if(keepExpr)steps.push(keepExpr);if(mutParts.length)steps.push(mutParts.join(\" | \"));if(!steps.length){jqOut.value=\"\";return}var inner=steps.join(\" | \");if(curInfo.jq===\".\"){jqOut.value=inner}else{jqOut.value=curInfo.jq+\" |= (\"+inner+\")\"}}else{var leaf=draftRows[0];if(!leaf){jqOut.value=\"\";return}if(leaf.del){jqOut.value=\"del(\" + curInfo.jq + \")\"}else if(leaf.changed){jqOut.value=curInfo.jq + \" = \" + JSON.stringify(parseInputVal(leaf.rawVal))}else{jqOut.value=\"\"}}}"
+
+        + "function recomputeJq(){if(!curInfo)return;if(delSelf){jqOut.value=\"del(\" + curInfo.jq + \")\";return}if(curInfo.isBranch){var keptRows=[],delTargets=[],modExprs=[],hasKeep=false;for(var i=0;i<draftRows.length;i++){if(draftRows[i].keep){hasKeep=true;keptRows.push(draftRows[i])}}function normDelSeg(seg){if(!seg)return \"\";if(/^\\[\\d+\\]$/.test(seg))return \".\"+seg;return seg}if(hasKeep){if(Array.isArray(curInfo.val)){var arrItems=[];for(var a=0;a<keptRows.length;a++){var ar=keptRows[a];if(ar.changed){arrItems.push(JSON.stringify(parseInputVal(ar.rawVal)))}else{arrItems.push(\".[\"+ar.key+\"]\")}}var stepsArr=[];if(arrItems.length>0)stepsArr.push(\"[\" + arrItems.join(\",\") + \"]\");for(var m=0;m<draftRows.length;m++){var mr=draftRows[m];if(!mr.keep&&mr.changed&&mr.rel){stepsArr.push(normDelSeg(mr.rel)+\" = \"+JSON.stringify(parseInputVal(mr.rawVal)))}}if(!stepsArr.length){jqOut.value=\"\";return}var innerArr=stepsArr.join(\" | \");jqOut.value=curInfo.jq===\".\"?innerArr:(stepsArr.length>1?curInfo.jq+\" |= (\"+innerArr+\")\":curInfo.jq+\" |= \"+innerArr);return}else{for(var o=0;o<draftRows.length;o++){var orow=draftRows[o];if(!orow.keep&&orow.rel){delTargets.push(normDelSeg(orow.rel))}else if(orow.keep&&orow.changed&&orow.rel){modExprs.push(normDelSeg(orow.rel)+\" = \"+JSON.stringify(parseInputVal(orow.rawVal)))}}}}else{for(var k=0;k<draftRows.length;k++){var r=draftRows[k];if(r.del&&r.rel){delTargets.push(normDelSeg(r.rel))}else if(r.changed&&r.rel){modExprs.push(normDelSeg(r.rel)+\" = \"+JSON.stringify(parseInputVal(r.rawVal)))}}}var steps=[];if(delTargets.length>0)steps.push(\"del(\"+delTargets.join(\",\")+\")\");if(modExprs.length>0)steps.push(modExprs.join(\" | \"));if(!steps.length){jqOut.value=\"\";return}var inner=steps.join(\" | \");if(curInfo.jq===\".\"){jqOut.value=inner}else{jqOut.value=steps.length>1?curInfo.jq+\" |= (\"+inner+\")\":curInfo.jq+\" |= \"+inner}}else{var leaf=draftRows[0];if(!leaf){jqOut.value=\"\";return}if(leaf.del){jqOut.value=\"del(\" + curInfo.jq + \")\"}else if(leaf.changed){jqOut.value=curInfo.jq + \" = \" + JSON.stringify(parseInputVal(leaf.rawVal))}else{jqOut.value=\"\"}}}"
+
+
     + "window.onToggleSelf=function(cb){delSelf=cb.checked;recomputeJq()};"
     + "window.onRowKeep=function(idx,cb){draftRows[idx].keep=cb.checked;if(cb.checked)draftRows[idx].del=false;renderBatchRows();recomputeJq()};"
     + "window.onRowCheck=function(idx,cb){draftRows[idx].del=cb.checked;if(cb.checked)draftRows[idx].keep=false;renderBatchRows();recomputeJq()};"
