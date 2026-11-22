@@ -1,7 +1,0 @@
-// jq编写器
-// 导入抓包json内容可直观进行 修改,保留,屏蔽,自动生成jq表达式
-// 安装重写后访问这个地址 https://quantumult.dev/tool
-
-hostname = quantumult.dev
-
-^https:\/\/quantumult\.dev\/tool url script-request-body https://github.com/z-jinkee/quantumultx/raw/refs/heads/main/js/html.js
